@@ -19,7 +19,10 @@ static bool is_ready(const std::future<R> &f)
 
 // ExecutionGraph definitions /////////////////////////////////////////////////
 
-ExecutionGraph::ExecutionGraph(anari::Device d) : m_scene(d) {}
+ExecutionGraph::ExecutionGraph(anari::Device d)
+{
+  setANARIDevice(d);
+}
 
 ExecutionGraph::~ExecutionGraph()
 {
@@ -49,9 +52,18 @@ void ExecutionGraph::removeNode(int id)
       m_nodes.end());
 }
 
+void ExecutionGraph::setANARIDevice(anari::Device d)
+{
+  m_scene = std::make_unique<interop::anari::ANARIScene>(d);
+  for (auto *n : m_primaryNodes) {
+    if (n->type() == NodeType::MAPPER)
+      ((MapperNode *)n)->addMapperToScene(*m_scene, {});
+  }
+}
+
 anari::World ExecutionGraph::getANARIWorld() const
 {
-  return m_scene.GetANARIWorld();
+  return m_scene->GetANARIWorld();
 }
 
 void ExecutionGraph::update(
@@ -152,9 +164,9 @@ void ExecutionGraph::print()
     printf("%s\n", m->uniqueName());
   printf("\n");
 
-  printf("mappers added to scene: {'%s'", m_scene.GetMapper(0).GetName());
-  for (size_t i = 1; i < m_scene.GetNumberOfMappers(); i++)
-    printf(",'%s'", m_scene.GetMapper(i).GetName());
+  printf("mappers added to scene: {'%s'", m_scene->GetMapper(0).GetName());
+  for (size_t i = 1; i < m_scene->GetNumberOfMappers(); i++)
+    printf(",'%s'", m_scene->GetMapper(i).GetName());
   printf("}\n");
 }
 

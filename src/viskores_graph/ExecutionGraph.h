@@ -11,6 +11,7 @@
 // std
 #include <functional>
 #include <future>
+#include <memory>
 #include <mutex>
 
 namespace viskores {
@@ -18,15 +19,15 @@ namespace graph {
 
 using GraphUpdateCallback = std::function<void()>;
 
+// clang-format off
 // NOTE: This governs the execution behavior of ExecutionGraph::update()
 enum class GraphExecutionPolicy
 {
-  // clang-format off
   MAIN_THREAD_ONLY,   // All nodes updated on the calling thread (synchronous)
   FILTER_NODES_ASYNC, // Source/filter nodes executed asynchronously
   ALL_ASYNC           // All nodes executed asynchronously
-            // clang-format on
 };
+// clang-format on
 
 struct DeferredParameterUpdateValue
 {
@@ -59,8 +60,9 @@ struct VISKORES_GRAPH_EXPORT ExecutionGraph : public NodeObserver
   size_t getNumberOfNodes() const;
   Node *getNode(size_t i) const;
 
-  // Scene //
+  // ANARI Scene //
 
+  void setANARIDevice(anari::Device d);
   anari::World getANARIWorld() const;
 
   // Graph Updates //
@@ -101,7 +103,7 @@ struct VISKORES_GRAPH_EXPORT ExecutionGraph : public NodeObserver
   mutable std::mutex m_parameterBufferMutex;
 
   mutable std::future<void> m_updateFuture;
-  mutable interop::anari::ANARIScene m_scene;
+  mutable std::unique_ptr<interop::anari::ANARIScene> m_scene;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -123,7 +125,7 @@ inline T *ExecutionGraph::addNamedNode(const std::string &name, Args &&...args)
   if (node->isPrimary()) {
     m_primaryNodes.push_back(node);
     if (node->type() == NodeType::MAPPER)
-      ((MapperNode *)node)->addMapperToScene(m_scene, {});
+      ((MapperNode *)node)->addMapperToScene(*m_scene, {});
   }
   return node;
 }
