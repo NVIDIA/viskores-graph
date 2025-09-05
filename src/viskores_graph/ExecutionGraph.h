@@ -37,7 +37,7 @@ struct DeferredParameterUpdateValue
 
 struct VISKORES_GRAPH_EXPORT ExecutionGraph : public NodeObserver
 {
-  ExecutionGraph(anari::Device d);
+  ExecutionGraph(anari::Device d = {});
   ~ExecutionGraph();
 
   // Not copyable or movable
@@ -126,7 +126,7 @@ inline T *ExecutionGraph::addNamedNode(const std::string &name, Args &&...args)
   node->setObserver(this);
   if (node->isPrimary()) {
     m_primaryNodes.push_back(node);
-    if (node->type() == NodeType::MAPPER)
+    if (m_scene && node->type() == NodeType::MAPPER)
       ((MapperNode *)node)->addMapperToScene(*m_scene, {});
   }
   return node;

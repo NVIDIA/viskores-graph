@@ -21,7 +21,8 @@ static bool is_ready(const std::future<R> &f)
 
 ExecutionGraph::ExecutionGraph(anari::Device d)
 {
-  setANARIDevice(d);
+  if (d)
+    setANARIDevice(d);
   m_instances.reserve(10);
 }
 
@@ -65,7 +66,7 @@ void ExecutionGraph::setANARIDevice(anari::Device d)
 
 anari::World ExecutionGraph::getANARIWorld() const
 {
-  return m_scene->GetANARIWorld();
+  return m_scene ? m_scene->GetANARIWorld() : nullptr;
 }
 
 const std::vector<anari::Instance> &ExecutionGraph::getANARIInstances() const
@@ -174,10 +175,12 @@ void ExecutionGraph::print()
     printf("%s\n", m->uniqueName());
   printf("\n");
 
-  printf("mappers added to scene: {'%s'", m_scene->GetMapper(0).GetName());
-  for (size_t i = 1; i < m_scene->GetNumberOfMappers(); i++)
-    printf(",'%s'", m_scene->GetMapper(i).GetName());
-  printf("}\n");
+  if (m_scene) {
+    printf("mappers added to scene: {'%s'", m_scene->GetMapper(0).GetName());
+    for (size_t i = 1; i < m_scene->GetNumberOfMappers(); i++)
+      printf(",'%s'", m_scene->GetMapper(i).GetName());
+    printf("}\n");
+  }
 }
 
 void ExecutionGraph::nodeChanged(Node *)
