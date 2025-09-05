@@ -62,8 +62,10 @@ void ExecutionGraph::setANARIDevice(anari::Device d)
     return;
   m_scene = std::make_unique<interop::anari::ANARIScene>(d);
   for (auto *n : m_primaryNodes) {
-    if (n->type() == NodeType::MAPPER)
+    if (n->type() == NodeType::MAPPER) {
       ((MapperNode *)n)->addMapperToScene(*m_scene, {});
+      n->markChanged();
+    }
   }
 }
 
