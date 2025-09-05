@@ -21,8 +21,7 @@ static bool is_ready(const std::future<R> &f)
 
 ExecutionGraph::ExecutionGraph(anari::Device d)
 {
-  if (d)
-    setANARIDevice(d);
+  setANARIDevice(d);
   m_instances.reserve(10);
 }
 
@@ -56,12 +55,16 @@ void ExecutionGraph::removeNode(int id)
 
 void ExecutionGraph::setANARIDevice(anari::Device d)
 {
+  sync();
+  m_instances.clear();
+  m_scene.reset();
+  if (!d)
+    return;
   m_scene = std::make_unique<interop::anari::ANARIScene>(d);
   for (auto *n : m_primaryNodes) {
     if (n->type() == NodeType::MAPPER)
       ((MapperNode *)n)->addMapperToScene(*m_scene, {});
   }
-  m_instances.clear();
 }
 
 anari::World ExecutionGraph::getANARIWorld() const
