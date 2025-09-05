@@ -64,6 +64,7 @@ struct VISKORES_GRAPH_EXPORT ExecutionGraph : public NodeObserver
 
   void setANARIDevice(anari::Device d);
   anari::World getANARIWorld() const;
+  const std::vector<anari::Instance> &getANARIInstances() const;
 
   // Graph Updates //
 
@@ -104,6 +105,7 @@ struct VISKORES_GRAPH_EXPORT ExecutionGraph : public NodeObserver
 
   mutable std::future<void> m_updateFuture;
   mutable std::unique_ptr<interop::anari::ANARIScene> m_scene;
+  std::vector<anari::Instance> m_instances;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

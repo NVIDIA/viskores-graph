@@ -22,6 +22,7 @@ static bool is_ready(const std::future<R> &f)
 ExecutionGraph::ExecutionGraph(anari::Device d)
 {
   setANARIDevice(d);
+  m_instances.reserve(10);
 }
 
 ExecutionGraph::~ExecutionGraph()
@@ -59,11 +60,17 @@ void ExecutionGraph::setANARIDevice(anari::Device d)
     if (n->type() == NodeType::MAPPER)
       ((MapperNode *)n)->addMapperToScene(*m_scene, {});
   }
+  m_instances.clear();
 }
 
 anari::World ExecutionGraph::getANARIWorld() const
 {
   return m_scene->GetANARIWorld();
+}
+
+const std::vector<anari::Instance> &ExecutionGraph::getANARIInstances() const
+{
+  return m_instances;
 }
 
 void ExecutionGraph::update(
@@ -84,6 +91,7 @@ void ExecutionGraph::update(
   auto doUpdate = [&, cb = std::move(_cb)]() {
     while (needsToUpdate()) {
       m_numVisibleMappers = 0;
+      m_instances.clear();
       consumeParameters();
 
       try {
@@ -92,8 +100,10 @@ void ExecutionGraph::update(
             auto *mn = (MapperNode *)n;
             if (m_currentPolicy != GraphExecutionPolicy::FILTER_NODES_ASYNC) {
               mn->update();
-              if (!mn->isMapperEmpty())
+              if (!mn->isMapperEmpty()) {
                 m_numVisibleMappers++;
+                m_instances.push_back(mn->getMapper()->GetANARIInstance());
+              }
             } else {
               mn->updateUpstreamNodes();
             }
