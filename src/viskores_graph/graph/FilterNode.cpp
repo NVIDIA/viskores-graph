@@ -67,6 +67,16 @@ void FilterNode::update()
   markUpdated();
 }
 
+std::string FilterNode::selectedFieldName(
+    InPort *p, const cont::DataSet &ds) const
+{
+  const auto *cs = p->cselector();
+  if (!cs || cs->numFields() == 0)
+    return {};
+  std::string name = cs->fieldName();
+  return ds.HasField(name) ? name : std::string{};
+}
+
 bool FilterNode::needsUpdate()
 {
   return Node::needsUpdate() || m_datasetInPort.connectionHasNewValue();

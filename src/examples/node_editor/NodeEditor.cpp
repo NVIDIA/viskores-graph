@@ -400,16 +400,34 @@ void NodeEditor::contextMenu()
       if (ImGui::BeginMenu("filter")) {
         if (ImGui::MenuItem("cell average"))
           addedNode = m_graph->addNode<graph::CellAverageNode>();
+        if (ImGui::MenuItem("cell measures"))
+          addedNode = m_graph->addNode<graph::CellMeasuresNode>();
         if (ImGui::MenuItem("clean grid"))
           addedNode = m_graph->addNode<graph::CleanGridNode>();
+        if (ImGui::MenuItem("clip with field"))
+          addedNode = m_graph->addNode<graph::ClipWithFieldNode>();
         if (ImGui::MenuItem("contour"))
           addedNode = m_graph->addNode<graph::ContourNode>();
+        if (ImGui::MenuItem("external faces"))
+          addedNode = m_graph->addNode<graph::ExternalFacesNode>();
         if (ImGui::MenuItem("gradient"))
           addedNode = m_graph->addNode<graph::GradientNode>();
+        if (ImGui::MenuItem("log values"))
+          addedNode = m_graph->addNode<graph::LogValuesNode>();
+        if (ImGui::MenuItem("mask"))
+          addedNode = m_graph->addNode<graph::MaskNode>();
+        if (ImGui::MenuItem("mask points"))
+          addedNode = m_graph->addNode<graph::MaskPointsNode>();
+        if (ImGui::MenuItem("mesh quality"))
+          addedNode = m_graph->addNode<graph::MeshQualityNode>();
         if (ImGui::MenuItem("point average"))
           addedNode = m_graph->addNode<graph::PointAverageNode>();
+        if (ImGui::MenuItem("point elevation"))
+          addedNode = m_graph->addNode<graph::PointElevationNode>();
         if (ImGui::MenuItem("probe"))
           addedNode = m_graph->addNode<graph::ProbeNode>();
+        if (ImGui::MenuItem("shrink"))
+          addedNode = m_graph->addNode<graph::ShrinkNode>();
         if (ImGui::MenuItem("slice"))
           addedNode = m_graph->addNode<graph::SliceNode>();
         if (ImGui::MenuItem("streamline"))
@@ -418,12 +436,18 @@ void NodeEditor::contextMenu()
           addedNode = m_graph->addNode<graph::SurfaceNormalsNode>();
         if (ImGui::MenuItem("tetrahedralize"))
           addedNode = m_graph->addNode<graph::TetrahedralizeNode>();
+        if (ImGui::MenuItem("threshold"))
+          addedNode = m_graph->addNode<graph::ThresholdNode>();
+        if (ImGui::MenuItem("triangulate"))
+          addedNode = m_graph->addNode<graph::TriangulateNode>();
         if (ImGui::MenuItem("tube"))
           addedNode = m_graph->addNode<graph::TubeNode>();
         if (ImGui::MenuItem("vector magnitude"))
           addedNode = m_graph->addNode<graph::VectorMagnitudeNode>();
         if (ImGui::MenuItem("vertex clustering"))
           addedNode = m_graph->addNode<graph::VertexClusteringNode>();
+        if (ImGui::MenuItem("warp"))
+          addedNode = m_graph->addNode<graph::WarpNode>();
         ImGui::EndMenu();
       }
 

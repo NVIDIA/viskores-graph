@@ -8,19 +8,44 @@
 namespace viskores {
 namespace graph {
 
+GradientNode::GradientNode()
+{
+  addParameter({this, "computeGradient", ParameterType::BOOL, true});
+  addParameter({this, "pointGradient", ParameterType::BOOL, false});
+  addParameter({this, "divergence", ParameterType::BOOL, false});
+  addParameter({this, "vorticity", ParameterType::BOOL, false});
+  addParameter({this, "qCriterion", ParameterType::BOOL, false});
+}
+
 const char *GradientNode::kind() const
 {
   return "Gradient";
 }
 
+void GradientNode::parameterChanged(Parameter *p, ParameterChangeType type)
+{
+  if (type == ParameterChangeType::NEW_VALUE)
+    markChanged();
+}
+
 cont::DataSet GradientNode::execute()
 {
-  auto ds = getDataSetFromPort(datasetInput());
+  auto *inPort = datasetInput();
+  auto ds = getDataSetFromPort(inPort);
 
   filter::vector_analysis::Gradient filter;
   filter.SetFieldsToPass(filter::FieldSelection::Mode::None);
-  filter.SetActiveField(ds.GetField(0).GetName());
+  const auto fieldName = selectedFieldName(inPort, ds);
+  if (fieldName.empty())
+    filter.SetUseCoordinateSystemAsField(true);
+  else
+    filter.SetActiveField(fieldName);
   filter.SetOutputFieldName("Gradient");
+  filter.SetComputeGradient(parameter("computeGradient")->valueAs<bool>());
+  filter.SetComputePointGradient(parameter("pointGradient")->valueAs<bool>());
+  filter.SetComputeDivergence(parameter("divergence")->valueAs<bool>());
+  filter.SetComputeVorticity(parameter("vorticity")->valueAs<bool>());
+  filter.SetComputeQCriterion(parameter("qCriterion")->valueAs<bool>());
 
   return filter.Execute(ds);
 }

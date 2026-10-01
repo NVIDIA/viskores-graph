@@ -6,6 +6,8 @@
 #include "Node.h"
 // viskores
 #include <viskores/cont/DataSet.h>
+// std
+#include <string>
 
 namespace viskores {
 namespace graph {
@@ -28,6 +30,11 @@ struct VISKORES_GRAPH_EXPORT FilterNode : public Node
 
   void update() override;
 
+ protected:
+  // Name of the field chosen with the port's field selector, or an empty
+  // string if "[none]" is selected or the field isn't in 'ds'
+  std::string selectedFieldName(InPort *p, const cont::DataSet &ds) const;
+
  private:
   virtual bool needsUpdate() override;
   virtual cont::DataSet execute() = 0;
@@ -42,6 +49,16 @@ struct VISKORES_GRAPH_EXPORT CellAverageNode : public FilterNode
 {
   CellAverageNode() = default;
   const char *kind() const override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT CellMeasuresNode : public FilterNode
+{
+  CellMeasuresNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
 
  private:
   cont::DataSet execute() override;
@@ -62,6 +79,16 @@ struct VISKORES_GRAPH_EXPORT CleanGridNode : public FilterNode
   bool m_removeDegenerateCells{true};
 };
 
+struct VISKORES_GRAPH_EXPORT ClipWithFieldNode : public FilterNode
+{
+  ClipWithFieldNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
 struct VISKORES_GRAPH_EXPORT ContourNode : public FilterNode
 {
   ContourNode();
@@ -72,10 +99,61 @@ struct VISKORES_GRAPH_EXPORT ContourNode : public FilterNode
   cont::DataSet execute() override;
 };
 
+struct VISKORES_GRAPH_EXPORT ExternalFacesNode : public FilterNode
+{
+  ExternalFacesNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
 struct VISKORES_GRAPH_EXPORT GradientNode : public FilterNode
 {
-  GradientNode() = default;
+  GradientNode();
   const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT LogValuesNode : public FilterNode
+{
+  LogValuesNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT MaskNode : public FilterNode
+{
+  MaskNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT MaskPointsNode : public FilterNode
+{
+  MaskPointsNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT MeshQualityNode : public FilterNode
+{
+  MeshQualityNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
 
  private:
   cont::DataSet execute() override;
@@ -85,6 +163,16 @@ struct VISKORES_GRAPH_EXPORT PointAverageNode : public FilterNode
 {
   PointAverageNode() = default;
   const char *kind() const override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT PointElevationNode : public FilterNode
+{
+  PointElevationNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
 
  private:
   cont::DataSet execute() override;
@@ -110,6 +198,16 @@ struct VISKORES_GRAPH_EXPORT ProbeNode : public FilterNode
   InPort m_mainDataInPort{PortType::DATASET, "dataset", this};
   InPort m_sampleQuantityInPort{PortType::DATASET, "sample quantity", this};
   bool m_removeHiddenFields{true};
+};
+
+struct VISKORES_GRAPH_EXPORT ShrinkNode : public FilterNode
+{
+  ShrinkNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
 };
 
 struct VISKORES_GRAPH_EXPORT SliceNode : public FilterNode
@@ -171,6 +269,25 @@ struct VISKORES_GRAPH_EXPORT TetrahedralizeNode : public FilterNode
   cont::DataSet execute() override;
 };
 
+struct VISKORES_GRAPH_EXPORT ThresholdNode : public FilterNode
+{
+  ThresholdNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT TriangulateNode : public FilterNode
+{
+  TriangulateNode() = default;
+  const char *kind() const override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
 struct VISKORES_GRAPH_EXPORT TubeNode : public FilterNode
 {
   TubeNode();
@@ -197,6 +314,16 @@ struct VISKORES_GRAPH_EXPORT VectorMagnitudeNode : public FilterNode
 struct VISKORES_GRAPH_EXPORT VertexClusteringNode : public FilterNode
 {
   VertexClusteringNode();
+  const char *kind() const override;
+  void parameterChanged(Parameter *p, ParameterChangeType type) override;
+
+ private:
+  cont::DataSet execute() override;
+};
+
+struct VISKORES_GRAPH_EXPORT WarpNode : public FilterNode
+{
+  WarpNode();
   const char *kind() const override;
   void parameterChanged(Parameter *p, ParameterChangeType type) override;
 

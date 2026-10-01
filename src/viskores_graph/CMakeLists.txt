@@ -23,18 +23,30 @@ set(SOURCES
   graph/TimeStamp.cpp
 
   graph/filter/CellAverage.cpp
+  graph/filter/CellMeasures.cpp
   graph/filter/CleanGrid.cpp
+  graph/filter/ClipWithField.cpp
   graph/filter/Contour.cpp
+  graph/filter/ExternalFaces.cpp
   graph/filter/Gradient.cpp
+  graph/filter/LogValues.cpp
+  graph/filter/Mask.cpp
+  graph/filter/MaskPoints.cpp
+  graph/filter/MeshQuality.cpp
   graph/filter/PointAverage.cpp
+  graph/filter/PointElevation.cpp
   graph/filter/Probe.cpp
+  graph/filter/Shrink.cpp
   graph/filter/Slice.cpp
   graph/filter/Streamline.cpp
   graph/filter/SurfaceNormals.cpp
   graph/filter/Tetrahedralize.cpp
+  graph/filter/Threshold.cpp
+  graph/filter/Triangulate.cpp
   graph/filter/Tube.cpp
   graph/filter/VectorMagnitude.cpp
   graph/filter/VertexClustering.cpp
+  graph/filter/Warp.cpp
 
   graph/mapper/Glyph.cpp
   graph/mapper/Point.cpp
