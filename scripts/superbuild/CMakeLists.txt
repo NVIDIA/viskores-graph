@@ -55,7 +55,7 @@ build_subproject(
 
 build_subproject(
   NAME Viskores
-  URL "git@github.com:Viskores/viskores.git"
+  URL "https://github.com/Viskores/viskores/archive/refs/tags/v1.2.0.zip"
   BUILD_ARGS
     -DViskores_ENABLE_ANARI=ON
     -DViskores_ENABLE_BENCHMARKS=OFF

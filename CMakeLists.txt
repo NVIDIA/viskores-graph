@@ -32,10 +32,10 @@ option(BUILD_SHARED_LIBS "Build shared libraries instead of static" ON)
 ## Dependencies ##
 
 set(ANARI_VERSION_REQUIRED 0.14.0)
-set(VISKORES_VERSION_REQUIRED 1.0)
+set(VISKORES_VERSION_REQUIRED 1.2)
 
 find_package(anari ${ANARI_VERSION_REQUIRED} REQUIRED)
-find_package(Viskores ${VIKORES_VERSION_REQUIRED} REQUIRED)
+find_package(Viskores ${VISKORES_VERSION_REQUIRED} REQUIRED)
 set(glm_DIR ${CMAKE_CURRENT_LIST_DIR}/external/glm/lib/cmake/glm)
 find_package(glm REQUIRED)
 mark_as_advanced(glm_DIR)

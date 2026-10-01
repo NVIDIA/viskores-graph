@@ -9,7 +9,7 @@ Building Viskores-GRAPH requires the following:
 
 - CMake 3.17+
 - C++17 compiler
-- [Viskores](https://github.com/Viskores/viskores) 1.0
+- [Viskores](https://github.com/Viskores/viskores) 1.2
 - [ANARI-SDK](https://github.com/KhronosGroup/ANARI-SDK) 0.14.0+
 
 Viskores and ANARI-SDK can be found via placing their installation locations on
